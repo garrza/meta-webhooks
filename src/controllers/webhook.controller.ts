@@ -1,11 +1,13 @@
-import { Controller, Post, Body, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Body, Req, HttpException, HttpStatus } from '@nestjs/common';
+import { Request } from 'express';
+import * as crypto from 'crypto';
 
 @Controller('webhook')
 export class WebhookController {
   @Post()
-  async handleWebhook(@Body() webhookData: any): Promise<string> {
+  async handleWebhook(@Req() req: Request, @Body() webhookData: any): Promise<string> {
     try {
-      const isVerified = await this.verifyWhatsAppWebhookSignature(webhookData);
+      const isVerified = await this.verifyWhatsAppWebhookSignature(req, webhookData);
       if (!isVerified) {
         throw new HttpException('Invalid webhook signature', HttpStatus.UNAUTHORIZED);
       }
@@ -51,11 +53,17 @@ export class WebhookController {
     console.log('Image message received:', message.image.id);
   }
 
-  // WhatsApp Webhook Signature Verification (Async)
-  private async verifyWhatsAppWebhookSignature(webhookData: any): Promise<boolean> {
-    // Implement WhatsApp's signature verification logic here 
-    // You'll need your app secret, a crypto library, etc.
-    // ... verification code ...
-    return true; // Replace with the actual verification result
+  private async verifyWhatsAppWebhookSignature(req: Request, webhookData: any): Promise<boolean> {
+    const appSecret = process.env.WHATSAPP_APP_SECRET; 
+    const signatureHeader = req.headers['x-whatsapp-signature-256'] as string;
+
+    if (!signatureHeader || !appSecret) {
+        return false;
+    }
+
+    const hmac = crypto.createHmac('sha256', appSecret);
+    hmac.update(Buffer.from(JSON.stringify(webhookData), 'utf8'));
+    const expectedSignature = `sha256=${hmac.digest('hex')}`;
+    return expectedSignature === signatureHeader;
   }
 }
