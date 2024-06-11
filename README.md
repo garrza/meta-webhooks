@@ -1,73 +1,54 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+Meta Webhook Test Server with NestJS and HTTPS Tunneling
+This project sets up a secure webhook test server for Meta using:
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+NestJS: A powerful Node.js framework for building efficient, scalable server-side applications.
+HTTPS Tunneling (Microsoft Tunnel): Exposes your local server over HTTPS, which is required for Meta webhooks.
+Features
+Webhook Endpoint: Receives and processes webhooks from Meta.
+Signature Verification: Ensures webhook authenticity and prevents unauthorized access.
+Event Handling: Distinguishes between different Meta event types and routes them to specific handlers.
+Error Handling: Includes robust error handling mechanisms for graceful recovery.
+Prerequisites
+Node.js and npm: Install the latest versions.
+NestJS CLI: npm install -g @nestjs/cli
+Microsoft Tunnel: Download and install the client from Microsoft's website.
+Setup
+Clone Repository: git clone <repository-url>
+Install Dependencies: npm install
+Microsoft Tunnel Configuration:
+Follow Microsoft's instructions to set up your tunnel.
+Obtain the HTTPS URL provided by the tunnel.
+Meta Webhook Configuration:
+In your Meta developer dashboard, create a new webhook subscription.
+Use the HTTPS URL from your tunnel as the callback URL.
+Select the events you want to receive webhooks for.
+(Optional) Set a verification token for added security.
+Environment Variables:
+Create a .env file in the project root directory.
+Add your Meta app secret and verification token (if used):
+META_APP_SECRET=your_app_secret
+META_VERIFY_TOKEN=your_verification_token
+Running the Server
+Development Mode:
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Bash
+npm run start:dev
+Use code with caution.
+content_copy
+This will watch for changes and automatically restart the server.
 
-## Description
+Production Mode:
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Bash
+npm run start:prod
+Use code with caution.
+content_copy
+Webhook Processing
+The /webhook endpoint handles POST requests from Meta.
+The WebhookController contains the logic for verifying signatures, extracting event data, and routing it to event-specific handlers.
+Implement your custom logic within the event handlers (e.g., handlePageEvent, handleUserEvent).
+Contributing
+Feel free to submit pull requests or open issues to report bugs or suggest improvements.
 
-## Installation
-
-```bash
-$ npm install
-```
-
-## Running the app
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+License
+This project is licensed under the MIT License - see the LICENSE file for details.
